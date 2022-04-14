@@ -25,7 +25,7 @@ router.get('/refresh', (req, res)=>{
     const accessToken = jwt.sign({ email: email }, config.accessScret, {
         expiresIn: "2m",
     });
-    return res.status(200).json({ success: true, accessToken: accessToken });
+    return res.status(200).json({ accessToken: accessToken });
 })
 
 module.exports = router;
