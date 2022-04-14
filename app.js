@@ -25,13 +25,18 @@ app.post("/login", (req, res) => {
     //if expired, jwtwebtoken will send 401 error
     //fron-end keep it and send refresh request
     const accessToken = jwt.sign({ email: email }, config.accessScret, {
-        expiresIn: "2m",
+        expiresIn: "10m",
     });
     const refreshToken = jwt.sign({ email: email }, config.refreshSecret, {
-        expiresIn: "10m",
+        expiresIn: "1h",
     });
 
     return res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
+});
+
+app.post('/logout', (req, res)=>{
+    //cancel the refresh token in database
+    
 });
 
 app.listen(port, ()=>{
