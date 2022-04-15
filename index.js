@@ -5,6 +5,9 @@ var router = express.Router();
 const { isAuthenticated, verifyRefresh } = require("./auth/auth");
 const config = require('./config/jwt.json');
 
+router.get('/', (req, res)=>{
+  res.send("index router!");
+});
 
 router.get("/protected", isAuthenticated, (req, res) => {
   res.json({ 
@@ -14,7 +17,8 @@ router.get("/protected", isAuthenticated, (req, res) => {
   });
 });
 
-router.get('/refresh', (req, res)=>{
+router.post('/refresh', (req, res)=>{
+    console.log(req.body);
     const { email, refreshToken } = req.body;
     const isValid = verifyRefresh(email, refreshToken);
     if (!isValid) {
@@ -25,7 +29,7 @@ router.get('/refresh', (req, res)=>{
     const accessToken = jwt.sign({ email: email }, config.accessScret, {
         expiresIn: "2m",
     });
-    return res.status(200).json({ accessToken: accessToken });
+    return res.status(200).json(accessToken);
 })
 
 module.exports = router;

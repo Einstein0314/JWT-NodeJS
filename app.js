@@ -1,11 +1,19 @@
 const express = require('express');
 const app = express();
 const jwt = require("jsonwebtoken");
+const cors = require('cors');
 const config = require('./config/jwt.json');
 const indexRouter = require('./index.js');
 
 const port = process.env.PORT || 3000;
 
+//test email and password
+const testCredentials=[
+    {email: "test@gmail.com", password: "test"}
+];  
+
+
+app.use(cors());
 app.use(express.json());
 app.use('/index', indexRouter);
 
@@ -15,11 +23,19 @@ app.get('/', (req, res)=>{
 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
+
     //check from database
     if (!email || !password) {
         return res
         .status(400)
-        .json({ success: false, error: "enter valid credientials" });
+        .json({ success: false, error: "enter valid credentials" });
+    }
+
+    if(email!=testCredentials[0].email || password!=testCredentials[0].password)
+    {
+        return res
+        .status(400)
+        .json({success: false, error: "Invalid email and password"});
     }
 
     //if expired, jwtwebtoken will send 401 error
@@ -42,3 +58,5 @@ app.post('/logout', (req, res)=>{
 app.listen(port, ()=>{
     console.log("Server listen on "+port);
 });
+
+module.exports = app;
