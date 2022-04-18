@@ -18,7 +18,7 @@ router.get("/protected", isAuthenticated, (req, res) => {
 });
 
 router.post('/refresh', (req, res)=>{
-    console.log(req.body);
+    //console.log(req.body);
     const { email, refreshToken } = req.body;
     const isValid = verifyRefresh(email, refreshToken);
     if (!isValid) {

@@ -40,11 +40,14 @@ app.post("/login", (req, res) => {
 
     //if expired, jwtwebtoken will send 401 error
     //fron-end keep it and send refresh request
+    //TODO: refresh token can be eternal, just depends on your need
     const accessToken = jwt.sign({ email: email }, config.accessScret, {
         expiresIn: "10m",
     });
+
+    //不用超時重新登入->uuid, 有要超時登入->JWT
     const refreshToken = jwt.sign({ email: email }, config.refreshSecret, {
-        expiresIn: "1h",
+        expiresIn: "24h",
     });
 
     return res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
